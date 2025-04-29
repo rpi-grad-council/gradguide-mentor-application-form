@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graduate Student Mentorship Program Application</title>
+  <title>Graduate Student Mentorship Program Application - RPI Graduate Student Council</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -25,11 +25,20 @@
       max-width: 700px;
       width: 100%;
     }
-    h1 {
-      font-size: 28px;
-      color: #222;
+    .title-container {
       text-align: center;
       margin-bottom: 10px;
+    }
+    .title-container h1 {
+      font-size: 28px;
+      color: #222;
+      margin: 0;
+    }
+    .title-container h2 {
+      font-size: 20px;
+      color: #333;
+      font-weight: 500;
+      margin: 5px 0 0;
     }
     p {
       font-size: 16px;
@@ -93,7 +102,43 @@
     .field-group {
       margin-bottom: 20px;
     }
-    button {
+    .language-input {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .language-input input[type="text"] {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    .language-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .language-buttons button {
+      padding: 8px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .add-language {
+      background-color: #28a745;
+      color: white;
+    }
+    .add-language:hover {
+      background-color: #218838;
+    }
+    .remove-language {
+      background-color: #dc3545;
+      color: white;
+    }
+    .remove-language:hover {
+      background-color: #c82333;
+    }
+    button[type="submit"] {
       margin-top: 20px;
       padding: 12px 24px;
       background-color: #007bff;
@@ -106,15 +151,18 @@
       align-self: center;
       transition: background-color 0.3s;
     }
-    button:hover {
+    button[type="submit"]:hover {
       background-color: #0056b3;
     }
     @media (max-width: 600px) {
       .form-container {
         padding: 20px;
       }
-      h1 {
+      .title-container h1 {
         font-size: 24px;
+      }
+      .title-container h2 {
+        font-size: 18px;
       }
       input[type="text"],
       input[type="email"],
@@ -127,10 +175,13 @@
 </head>
 <body>
   <div class="form-container">
-    <h1>Graduate Student Mentorship Program Application</h1>
+    <div class="title-container">
+      <h1>Graduate Student Mentorship Program Application</h1>
+      <h2>RPI Graduate Student Council</h2>
+    </div>
     <p>Fill out this form to volunteer as a mentor for incoming graduate students at RPI. Please complete all fields marked with an asterisk (*) to ensure your application is valid.</p>
 
-    <form action="mailto:mentorship@rpi.edu" method="post" enctype="text/plain">
+    <form action="mailto:mentorship@rpi.edu" method="post" enctype="text/plain" id="mentorship-form">
       <div class="field-group">
         <label for="name" class="required">Full Name</label>
         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -174,8 +225,17 @@
       </div>
 
       <div class="field-group">
-        <label for="languages" class="required">Languages You Speak</label>
-        <input type="text" id="languages" name="languages" placeholder="e.g., English, Spanish, Mandarin" required>
+        <label class="required">Languages You Speak</label>
+        <div id="language-list">
+          <div class="language-input">
+            <input type="text" name="language_1" placeholder="e.g., English" required>
+          </div>
+        </div>
+        <div class="language-buttons">
+          <button type="button" class="add-language">+</button>
+          <button type="button" class="remove-language" disabled>−</button>
+        </div>
+        <input type="hidden" id="languages" name="languages">
       </div>
 
       <div class="field-group">
@@ -232,5 +292,45 @@
       <button type="submit">Submit</button>
     </form>
   </div>
+
+  <script>
+    const languageList = document.getElementById('language-list');
+    const addButton = document.querySelector('.add-language');
+    const removeButton = document.querySelector('.remove-language');
+    const form = document.getElementById('mentorship-form');
+    const hiddenLanguages = document.getElementById('languages');
+    let languageCount = 1;
+
+    // Add new language input
+    addButton.addEventListener('click', () => {
+      languageCount++;
+      const newInputDiv = document.createElement('div');
+      newInputDiv.className = 'language-input';
+      newInputDiv.innerHTML = `<input type="text" name="language_${languageCount}" placeholder="e.g., Spanish">`;
+      languageList.appendChild(newInputDiv);
+      removeButton.disabled = false; // Enable remove button when more than one input
+    });
+
+    // Remove last language input
+    removeButton.addEventListener('click', () => {
+      if (languageCount > 1) {
+        languageList.removeChild(languageList.lastChild);
+        languageCount--;
+        if (languageCount === 1) {
+          removeButton.disabled = true; // Disable remove button when only one input remains
+        }
+      }
+    });
+
+    // Concatenate languages for submission
+    form.addEventListener('submit', (e) => {
+      const languageInputs = languageList.querySelectorAll('input[type="text"]');
+      const languages = Array.from(languageInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '')
+        .join(',');
+      hiddenLanguages.value = languages;
+    });
+  </script>
 </body>
 </html>
