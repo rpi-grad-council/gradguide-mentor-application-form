@@ -25,6 +25,14 @@
       max-width: 700px;
       width: 100%;
     }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      width: 150px;
+      height: auto;
+    }
     .title-container {
       text-align: center;
       margin-bottom: 10px;
@@ -102,21 +110,21 @@
     .field-group {
       margin-bottom: 20px;
     }
-    .language-input {
+    .language-input, .hobby-input {
       display: flex;
       align-items: center;
       margin-top: 5px;
     }
-    .language-input input[type="text"] {
+    .language-input input[type="text"], .hobby-input input[type="text"] {
       flex-grow: 1;
       margin-right: 10px;
     }
-    .language-buttons {
+    .language-buttons, .hobby-buttons {
       display: flex;
       gap: 10px;
       margin-top: 10px;
     }
-    .language-buttons button {
+    .language-buttons button, .hobby-buttons button {
       padding: 8px 15px;
       font-size: 16px;
       border-radius: 8px;
@@ -124,18 +132,18 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .add-language {
+    .add-language, .add-hobby {
       background-color: #28a745;
       color: white;
     }
-    .add-language:hover {
+    .add-language:hover, .add-hobby:hover {
       background-color: #218838;
     }
-    .remove-language {
+    .remove-language, .remove-hobby {
       background-color: #dc3545;
       color: white;
     }
-    .remove-language:hover {
+    .remove-language:hover, .remove-hobby:hover {
       background-color: #c82333;
     }
     button[type="submit"] {
@@ -164,6 +172,9 @@
       .title-container h2 {
         font-size: 18px;
       }
+      .logo-container img {
+        width: 120px;
+      }
       input[type="text"],
       input[type="email"],
       select,
@@ -175,6 +186,9 @@
 </head>
 <body>
   <div class="form-container">
+    <div class="logo-container">
+      <img src="rpi_gc_logo.png" alt="RPI Graduate Student Council Logo">
+    </div>
     <div class="title-container">
       <h1>Graduate Student Mentorship Program Application</h1>
       <h2>RPI Graduate Student Council</h2>
@@ -239,6 +253,20 @@
       </div>
 
       <div class="field-group">
+        <label class="required">Hobbies</label>
+        <div id="hobby-list">
+          <div class="hobby-input">
+            <input type="text" name="hobby_1" placeholder="e.g., Reading" required>
+          </div>
+        </div>
+        <div class="hobby-buttons">
+          <button type="button" class="add-hobby">+</button>
+          <button type="button" class="remove-hobby" disabled>−</button>
+        </div>
+        <input type="hidden" id="hobbies" name="hobbies">
+      </div>
+
+      <div class="field-group">
         <label class="required">Mentorship Areas - Willing to Contribute</label>
         <label><input type="checkbox" name="expertise_academics" value="academics"> Academics (e.g., coursework, research)</label>
         <label><input type="checkbox" name="expertise_university_life" value="university_life"> University Life (e.g., clubs, housing)</label>
@@ -294,42 +322,76 @@
   </div>
 
   <script>
+    // Language input handling
     const languageList = document.getElementById('language-list');
-    const addButton = document.querySelector('.add-language');
-    const removeButton = document.querySelector('.remove-language');
-    const form = document.getElementById('mentorship-form');
+    const addLanguageButton = document.querySelector('.add-language');
+    const removeLanguageButton = document.querySelector('.remove-language');
     const hiddenLanguages = document.getElementById('languages');
     let languageCount = 1;
 
-    // Add new language input
-    addButton.addEventListener('click', () => {
+    addLanguageButton.addEventListener('click', () => {
       languageCount++;
       const newInputDiv = document.createElement('div');
       newInputDiv.className = 'language-input';
       newInputDiv.innerHTML = `<input type="text" name="language_${languageCount}" placeholder="e.g., Spanish">`;
       languageList.appendChild(newInputDiv);
-      removeButton.disabled = false; // Enable remove button when more than one input
+      removeLanguageButton.disabled = false;
     });
 
-    // Remove last language input
-    removeButton.addEventListener('click', () => {
+    removeLanguageButton.addEventListener('click', () => {
       if (languageCount > 1) {
         languageList.removeChild(languageList.lastChild);
         languageCount--;
         if (languageCount === 1) {
-          removeButton.disabled = true; // Disable remove button when only one input remains
+          removeLanguageButton.disabled = true;
         }
       }
     });
 
-    // Concatenate languages for submission
+    // Hobby input handling
+    const hobbyList = document.getElementById('hobby-list');
+    const addHobbyButton = document.querySelector('.add-hobby');
+    const removeHobbyButton = document.querySelector('.remove-hobby');
+    const hiddenHobbies = document.getElementById('hobbies');
+    let hobbyCount = 1;
+
+    addHobbyButton.addEventListener('click', () => {
+      hobbyCount++;
+      const newInputDiv = document.createElement('div');
+      newInputDiv.className = 'hobby-input';
+      newInputDiv.innerHTML = `<input type="text" name="hobby_${hobbyCount}" placeholder="e.g., Painting">`;
+      hobbyList.appendChild(newInputDiv);
+      removeHobbyButton.disabled = false;
+    });
+
+    removeHobbyButton.addEventListener('click', () => {
+      if (hobbyCount > 1) {
+        hobbyList.removeChild(hobbyList.lastChild);
+        hobbyCount--;
+        if (hobbyCount === 1) {
+          removeHobbyButton.disabled = true;
+        }
+      }
+    });
+
+    // Form submission
+    const form = document.getElementById('mentorship-form');
     form.addEventListener('submit', (e) => {
+      // Concatenate languages
       const languageInputs = languageList.querySelectorAll('input[type="text"]');
       const languages = Array.from(languageInputs)
         .map(input => input.value.trim())
         .filter(value => value !== '')
         .join(',');
       hiddenLanguages.value = languages;
+
+      // Concatenate hobbies
+      const hobbyInputs = hobbyList.querySelectorAll('input[type="text"]');
+      const hobbies = Array.from(hobbyInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '')
+        .join(',');
+      hiddenHobbies.value = hobbies;
     });
   </script>
 </body>
