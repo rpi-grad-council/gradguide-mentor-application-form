@@ -110,6 +110,19 @@
     .field-group {
       margin-bottom: 20px;
     }
+    .gender-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .gender-field select {
+      flex: 1;
+    }
+    .gender-field input[type="text"] {
+      flex: 1;
+      display: none;
+    }
     .language-input, .hobby-input {
       display: flex;
       align-items: center;
@@ -181,6 +194,13 @@
       textarea {
         font-size: 16px;
       }
+      .gender-field {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .gender-field input[type="text"] {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -202,8 +222,16 @@
       </div>
 
       <div class="field-group">
-        <label for="pronouns">Pronouns</label>
-        <input type="text" id="pronouns" name="pronouns" placeholder="e.g., she/her, he/him, they/them">
+        <label for="gender" class="required">Gender</label>
+        <div class="gender-field">
+          <select id="gender" name="gender" required>
+            <option value="">Select your gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" id="gender-specify" name="gender_specify" placeholder="Please Specify">
+        </div>
       </div>
 
       <div class="field-group">
@@ -267,6 +295,11 @@
       </div>
 
       <div class="field-group">
+        <label for="about_yourself">About Yourself</label>
+        <textarea id="about_yourself" name="about_yourself" placeholder="Write a few lines about yourself (e.g., your interests, background, or motivation for mentoring)."></textarea>
+      </div>
+
+      <div class="field-group">
         <label class="required">Mentorship Areas - Willing to Contribute</label>
         <label><input type="checkbox" name="expertise_academics" value="academics"> Academics (e.g., coursework, research)</label>
         <label><input type="checkbox" name="expertise_university_life" value="university_life"> University Life (e.g., clubs, housing)</label>
@@ -322,6 +355,19 @@
   </div>
 
   <script>
+    // Gender field handling
+    const genderSelect = document.getElementById('gender');
+    const genderSpecify = document.getElementById('gender-specify');
+
+    genderSelect.addEventListener('change', () => {
+      if (genderSelect.value === 'Other') {
+        genderSpecify.style.display = 'block';
+      } else {
+        genderSpecify.style.display = 'none';
+        genderSpecify.value = ''; // Clear input when hidden
+      }
+    });
+
     // Language input handling
     const languageList = document.getElementById('language-list');
     const addLanguageButton = document.querySelector('.add-language');
@@ -392,6 +438,11 @@
         .filter(value => value !== '')
         .join(',');
       hiddenHobbies.value = hobbies;
+
+      // Handle gender specify
+      if (genderSelect.value !== 'Other') {
+        genderSpecify.value = '';
+      }
     });
   </script>
 </body>
