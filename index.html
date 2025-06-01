@@ -278,7 +278,8 @@
     </div>
     <p>Fill out this form to volunteer as a mentor for incoming graduate students at RPI. Please complete all fields marked with an asterisk (*) to ensure your application is valid.</p>
 
-    <form action="mailto:mentorship@rpi.edu" method="post" enctype="text/plain" id="mentorship-form">
+    <form id="mentorship-form" name="mentorship-form" data-netlify="true" method="POST">
+      <input type="hidden" name="form-name" value="mentorship-form">
       <div class="field-group">
         <label for="name" class="required">Full Name</label>
         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -501,7 +502,7 @@
     const thankYouMessage = document.getElementById('thank-you-message');
 
     form.addEventListener('submit', (e) => {
-      e.preventDefault(); // Prevent default mailto action
+      e.preventDefault();
 
       // Concatenate languages
       const languageInputs = languageList.querySelectorAll('input[type="text"]');
@@ -527,17 +528,22 @@
       // Show thank you message
       thankYouMessage.style.display = 'flex';
 
-      // Auto-hide message and trigger mailto after 3 seconds
-      setTimeout(() => {
+      // Submit form to Netlify
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString()
+      })
+      .then(() => {
+        setTimeout(() => {
+          thankYouMessage.style.display = 'none';
+          form.reset(); // Reset form after submission
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error('Form submission error:', error);
         thankYouMessage.style.display = 'none';
-        // Programmatically submit form data via mailto
-        const formData = new FormData(form);
-        let mailBody = '';
-        for (const [key, value] of formData.entries()) {
-          mailBody += `${key}=${encodeURIComponent(value)}\n`;
-        }
-        window.location.href = `mailto:mentorship@rpi.edu?subject=Mentorship Application&body=${encodeURIComponent(mailBody)}`;
-      }, 3000);
+      });
 
       // Allow clicking to dismiss message
       thankYouMessage.addEventListener('click', () => {
