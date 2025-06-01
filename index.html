@@ -33,6 +33,17 @@
       width: 150px;
       height: auto;
     }
+    .program-name {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .program-name h3 {
+      font-size: 24px;
+      color: #e63946;
+      margin: 0;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
     .title-container {
       text-align: center;
       margin-bottom: 10px;
@@ -185,6 +196,9 @@
       .title-container h2 {
         font-size: 18px;
       }
+      .program-name h3 {
+        font-size: 20px;
+      }
       .logo-container img {
         width: 120px;
       }
@@ -207,7 +221,10 @@
 <body>
   <div class="form-container">
     <div class="logo-container">
-      <img src="rpi_gc_logo.png" alt="RPI Graduate Student Council Logo">
+      <img src="rpiGcLogo.png" alt="RPI Graduate Student Council Logo">
+    </div>
+    <div class="program-name">
+      <h3>GRAD GUIDE</h3>
     </div>
     <div class="title-container">
       <h1>Graduate Student Mentorship Program Application</h1>
@@ -337,6 +354,11 @@
       <div class="field-group">
         <label for="discord">Discord ID</label>
         <input type="text" id="discord" name="discord" placeholder="e.g., username#1234">
+      </div>
+
+      <div class="field-group">
+        <label for="whatsapp">WhatsApp No.</label>
+        <input type="text" id="whatsapp" name="whatsapp" placeholder="e.g., +1 123-456-7890">
       </div>
 
       <div class="field-group">
