@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Graduate Student Mentorship Program Application - RPI Graduate Student Council</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -186,6 +187,42 @@
     button[type="submit"]:hover {
       background-color: #0056b3;
     }
+    .thank-you-message {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .thank-you-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+    .thank-you-content i {
+      font-size: 50px;
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+    .thank-you-content h3 {
+      font-size: 24px;
+      color: #333;
+      margin: 0 0 10px;
+    }
+    .thank-you-content p {
+      font-size: 16px;
+      color: #555;
+      margin: 0;
+    }
     @media (max-width: 600px) {
       .form-container {
         padding: 20px;
@@ -214,6 +251,15 @@
       }
       .gender-field input[type="text"] {
         width: 100%;
+      }
+      .thank-you-content {
+        padding: 20px;
+      }
+      .thank-you-content h3 {
+        font-size: 20px;
+      }
+      .thank-you-content i {
+        font-size: 40px;
       }
     }
   </style>
@@ -376,6 +422,14 @@
     </form>
   </div>
 
+  <div class="thank-you-message" id="thank-you-message">
+    <div class="thank-you-content">
+      <i class="fas fa-check-circle"></i>
+      <h3>Thank You for Your Submission!</h3>
+      <p>Your application has been received. We'll be in touch soon.</p>
+    </div>
+  </div>
+
   <script>
     // Gender field handling
     const genderSelect = document.getElementById('gender');
@@ -386,7 +440,7 @@
         genderSpecify.style.display = 'block';
       } else {
         genderSpecify.style.display = 'none';
-        genderSpecify.value = ''; // Clear input when hidden
+        genderSpecify.value = '';
       }
     });
 
@@ -444,7 +498,11 @@
 
     // Form submission
     const form = document.getElementById('mentorship-form');
+    const thankYouMessage = document.getElementById('thank-you-message');
+
     form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent default mailto action
+
       // Concatenate languages
       const languageInputs = languageList.querySelectorAll('input[type="text"]');
       const languages = Array.from(languageInputs)
@@ -465,6 +523,26 @@
       if (genderSelect.value !== 'Other') {
         genderSpecify.value = '';
       }
+
+      // Show thank you message
+      thankYouMessage.style.display = 'flex';
+
+      // Auto-hide message and trigger mailto after 3 seconds
+      setTimeout(() => {
+        thankYouMessage.style.display = 'none';
+        // Programmatically submit form data via mailto
+        const formData = new FormData(form);
+        let mailBody = '';
+        for (const [key, value] of formData.entries()) {
+          mailBody += `${key}=${encodeURIComponent(value)}\n`;
+        }
+        window.location.href = `mailto:mentorship@rpi.edu?subject=Mentorship Application&body=${encodeURIComponent(mailBody)}`;
+      }, 3000);
+
+      // Allow clicking to dismiss message
+      thankYouMessage.addEventListener('click', () => {
+        thankYouMessage.style.display = 'none';
+      });
     });
   </script>
 </body>
