@@ -278,7 +278,11 @@
     </div>
     <p>Fill out this form to volunteer as a mentor for incoming graduate students at RPI. Please complete all fields marked with an asterisk (*) to ensure your application is valid.</p>
 
-    <form action="mailto:mentorship@rpi.edu" method="post" enctype="text/plain" id="mentorship-form">
+    <form id="mentorship-form" name="mentorship-form" data-netlify="true" data-netlify-honeypot="bot-field" method="POST">
+      <input type="hidden" name="form-name" value="mentorship-form">
+      <div style="display: none;">
+        <label>Don’t fill this out: <input name="bot-field"></label>
+      </div>
       <div class="field-group">
         <label for="name" class="required">Full Name</label>
         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -501,8 +505,6 @@
     const thankYouMessage = document.getElementById('thank-you-message');
 
     form.addEventListener('submit', (e) => {
-      e.preventDefault(); // Prevent default mailto action
-
       // Concatenate languages
       const languageInputs = languageList.querySelectorAll('input[type="text"]');
       const languages = Array.from(languageInputs)
@@ -526,17 +528,9 @@
 
       // Show thank you message
       thankYouMessage.style.display = 'flex';
-
-      // Auto-hide message and trigger mailto after 3 seconds
       setTimeout(() => {
         thankYouMessage.style.display = 'none';
-        // Programmatically submit form data via mailto
-        const formData = new FormData(form);
-        let mailBody = '';
-        for (const [key, value] of formData.entries()) {
-          mailBody += `${key}=${encodeURIComponent(value)}\n`;
-        }
-        window.location.href = `mailto:mentorship@rpi.edu?subject=Mentorship Application&body=${encodeURIComponent(mailBody)}`;
+        form.reset(); // Reset form after submission
       }, 3000);
 
       // Allow clicking to dismiss message
