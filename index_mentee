@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graduate Student Mentorship Program Mentee Application - RPI Graduate Student Council</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 40px;
+      background-color: #f4f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background-color: #fff;
+      border: 2px solid #333;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      width: 100%;
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      width: 150px;
+      height: auto;
+    }
+    .program-name {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .program-name h3 {
+      font-size: 24px;
+      color: #e63946;
+      margin: 0;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .title-container {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .title-container h1 {
+      font-size: 28px;
+      color: #222;
+      margin: 0;
+    }
+    .title-container h2 {
+      font-size: 20px;
+      color: #333;
+      font-weight: 500;
+      margin: 5px 0 0;
+    }
+    .title-container h3 {
+      font-size: 20px;
+      color: #333;
+      font-weight: 500;
+      margin: 5px 0 0;
+    }
+    p {
+      font-size: 16px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      background-color: #fafafa;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+      outline: none;
+    }
+    input[type="checkbox"],
+    input[type="radio"] {
+      margin-right: 10px;
+      vertical-align: middle;
+      accent-color: #007bff;
+    }
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+    .required::after {
+      content: "*";
+      color: #e63946;
+      margin-left: 5px;
+    }
+    .note {
+      font-style: italic;
+      color: #666;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    .field-group {
+      margin-bottom: 20px;
+    }
+    .gender-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .gender-field select {
+      flex: 1;
+    }
+    .gender-field input[type="text"] {
+      flex: 1;
+      display: none;
+    }
+    .language-input, .hobby-input {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .language-input input[type="text"], .hobby-input input[type="text"] {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    .language-buttons, .hobby-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .language-buttons button, .hobby-buttons button {
+      padding: 8px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .add-language, .add-hobby {
+      background-color: #28a745;
+      color: white;
+    }
+    .add-language:hover, .add-hobby:hover {
+      background-color: #218838;
+    }
+    .remove-language, .remove-hobby {
+      background-color: #dc3545;
+      color: white;
+    }
+    .remove-language:hover, .remove-hobby:hover {
+      background-color: #c82333;
+    }
+    button[type="submit"] {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      align-self: center;
+      transition: background-color 0.3s;
+    }
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    .thank-you-message {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .thank-you-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+    .thank-you-content i {
+      font-size: 50px;
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+    .thank-you-content h3 {
+      font-size: 24px;
+      color: #333;
+      margin: 0 0 10px;
+    }
+    .thank-you-content p {
+      font-size: 16px;
+      color: #555;
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 20px;
+      }
+      .title-container h1 {
+        font-size: 24px;
+      }
+      .title-container h2 {
+        font-size: 18px;
+      }
+      .title-container h3 {
+        font-size: 18px;
+      }
+      .program-name h3 {
+        font-size: 20px;
+      }
+      .logo-container img {
+        width: 120px;
+      }
+      input[type="text"],
+      input[type="email"],
+      select,
+      textarea {
+        font-size: 16px;
+      }
+      .gender-field {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .gender-field input[type="text"] {
+        width: 100%;
+      }
+      .thank-you-content {
+        padding: 20px;
+      }
+      .thank-you-content h3 {
+        font-size: 20px;
+      }
+      .thank-you-content i {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="logo-container">
+      <img src="rpi_gc_logo.png" alt="RPI Graduate Student Council Logo">
+    </div>
+    <div class="program-name">
+      <h3>GRAD GUIDE</h3>
+    </div>
+    <div class="title-container">
+      <h1>Graduate Student Mentorship Program</h1>
+      <h2>Mentee Application</h2>
+      <h3>RPI Graduate Student Council</h3>
+    </div>
+    <p>Fill out this form to sign up as a mentee in the Grad Guide Mentorship Program at RPI. Please complete all fields marked with an asterisk (*) to ensure your application is valid.</p>
+
+    <form id="mentee-form" name="mentee-form" data-netlify="true" data-netlify-honeypot="bot-field" method="POST">
+      <input type="hidden" name="form-name" value="mentee-form">
+      <div style="display: none;">
+        <label>Don’t fill this out: <input name="bot-field"></label>
+      </div>
+      <div class="field-group">
+        <label for="name" class="required">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="field-group">
+        <label for="gender" class="required">Gender</label>
+        <div class="gender-field">
+          <select id="gender" name="gender" required>
+            <option value="">Select your gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" id="gender-specify" name="gender_specify" placeholder="Please Specify">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="required">New to the US</label>
+        <label><input type="radio" name="new_to_us" value="yes" required> Yes</label>
+        <label><input type="radio" name="new_to_us" value="no"> No</label>
+      </div>
+
+      <div class="field-group">
+        <label for="department" class="required">Department</label>
+        <input type="text" id="department" name="department" placeholder="e.g., Computer Science" required>
+      </div>
+
+      <div class="field-group">
+        <label for="program" class="required">Program</label>
+        <select id="program" name="program" required>
+          <option value="">Select your program</option>
+          <option value="Master's">Master's</option>
+          <option value="PhD">PhD</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="country" class="required">Country of Origin</label>
+        <input type="text" id="country" name="country" placeholder="e.g., United States" required>
+      </div>
+
+      <div class="field-group">
+        <label class="required">Languages You Speak</label>
+        <div id="language-list">
+          <div class="language-input">
+            <input type="text" name="language_1" placeholder="e.g., English" required>
+          </div>
+        </div>
+        <div class="language-buttons">
+          <button type="button" class="add-language">+</button>
+          <button type="button" class="remove-language" disabled>−</button>
+        </div>
+        <input type="hidden" id="languages" name="languages">
+      </div>
+
+      <div class="field-group">
+        <label class="required">Hobbies</label>
+        <div id="hobby-list">
+          <div class="hobby-input">
+            <input type="text" name="hobby_1" placeholder="e.g., Reading" required>
+          </div>
+        </div>
+        <div class="hobby-buttons">
+          <button type="button" class="add-hobby">+</button>
+          <button type="button" class="remove-hobby" disabled>−</button>
+        </div>
+        <input type="hidden" id="hobbies" name="hobbies">
+      </div>
+
+      <div class="field-group">
+        <label for="about_yourself">About Yourself</label>
+        <textarea id="about_yourself" name="about_yourself" placeholder="Write a few lines about yourself (e.g., your interests, background, or goals as a mentee)."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="required">Mentorship Areas - Seeking Support</label>
+        <label><input type="checkbox" name="support_academics" value="academics"> Academics (e.g., coursework, research)</label>
+        <label><input type="checkbox" name="support_university_life" value="university_life"> University Life (e.g., clubs, housing)</label>
+        <label><input type="checkbox" name="support_career_guidance" value="career_guidance"> Career Guidance (e.g., internships, networking)</label>
+        <label><input type="checkbox" name="support_general_support" value="general_support"> General Support (e.g., emotional support, settling in)</label>
+        <p class="note">Note: Select at least one mentorship area above.</p>
+      </div>
+
+      <div class="field-group">
+        <label for="semester" class="required">Semester Seeking Mentorship</label>
+        <select id="semester" name="semester" required>
+          <option value="">Select semester</option>
+          <option value="Fall 2025">Fall 2025</option>
+          <option value="Spring 2026">Spring 2026</option>
+          <option value="Fall 2026">Fall 2026</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="mentor_profile">Preferred Mentor Profile</label>
+        <textarea id="mentor_profile" name="mentor_profile" placeholder="e.g., I prefer a mentor from the same country, speaking the same language, or of the same gender."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="discord">Discord ID</label>
+        <input type="text" id="discord" name="discord" placeholder="e.g., username#1234">
+      </div>
+
+      <div class="field-group">
+        <label for="whatsapp">WhatsApp No.</label>
+        <input type="text" id="whatsapp" name="whatsapp" placeholder="e.g., +1 123-456-7890">
+      </div>
+
+      <div class="field-group">
+        <label for="email" class="required">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="e.g., student@rpi.edu" required>
+      </div>
+
+      <div class="field-group">
+        <label class="required">
+          <input type="checkbox" name="consent" required> I agree to abide by the mentorship program's guidelines and commit to engaging with my mentor to the best of my ability.
+        </label>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div class="thank-you-message" id="thank-you-message">
+    <div class="thank-you-content">
+      <i class="fas fa-check-circle"></i>
+      <h3>Thank You for Your Submission!</h3>
+      <p>Your application has been received. We'll be in touch soon.</p>
+    </div>
+  </div>
+
+  <script>
+    // Gender field handling
+    const genderSelect = document.getElementById('gender');
+    const genderSpecify = document.getElementById('gender-specify');
+
+    genderSelect.addEventListener('change', () => {
+      if (genderSelect.value === 'Other') {
+        genderSpecify.style.display = 'block';
+      } else {
+        genderSpecify.style.display = 'none';
+        genderSpecify.value = '';
+      }
+    });
+
+    // Language input handling
+    const languageList = document.getElementById('language-list');
+    const addLanguageButton = document.querySelector('.add-language');
+    const removeLanguageButton = document.querySelector('.remove-language');
+    const hiddenLanguages = document.getElementById('languages');
+    let languageCount = 1;
+
+    addLanguageButton.addEventListener('click', () => {
+      languageCount++;
+      const newInputDiv = document.createElement('div');
+      newInputDiv.className = 'language-input';
+      newInputDiv.innerHTML = `<input type="text" name="language_${languageCount}" placeholder="e.g., Spanish">`;
+      languageList.appendChild(newInputDiv);
+      removeLanguageButton.disabled = false;
+    });
+
+    removeLanguageButton.addEventListener('click', () => {
+      if (languageCount > 1) {
+        languageList.removeChild(languageList.lastChild);
+        languageCount--;
+        if (languageCount === 1) {
+          removeLanguageButton.disabled = true;
+        }
+      }
+    });
+
+    // Hobby input handling
+    const hobbyList = document.getElementById('hobby-list');
+    const addHobbyButton = document.querySelector('.add-hobby');
+    const removeHobbyButton = document.querySelector('.remove-hobby');
+    const hiddenHobbies = document.getElementById('hobbies');
+    let hobbyCount = 1;
+
+    addHobbyButton.addEventListener('click', () => {
+      hobbyCount++;
+      const newInputDiv = document.createElement('div');
+      newInputDiv.className = 'hobby-input';
+      newInputDiv.innerHTML = `<input type="text" name="hobby_${hobbyCount}" placeholder="e.g., Painting">`;
+      hobbyList.appendChild(newInputDiv);
+      removeHobbyButton.disabled = false;
+    });
+
+    removeHobbyButton.addEventListener('click', () => {
+      if (hobbyCount > 1) {
+        hobbyList.removeChild(hobbyList.lastChild);
+        hobbyCount--;
+        if (hobbyCount === 1) {
+          removeHobbyButton.disabled = true;
+        }
+      }
+    });
+
+    // Form submission
+    const form = document.getElementById('mentee-form');
+    const thankYouMessage = document.getElementById('thank-you-message');
+
+    form.addEventListener('submit', (e) => {
+      // Concatenate languages
+      const languageInputs = languageList.querySelectorAll('input[type="text"]');
+      const languages = Array.from(languageInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '')
+        .join(',');
+      hiddenLanguages.value = languages;
+
+      // Concatenate hobbies
+      const hobbyInputs = hobbyList.querySelectorAll('input[type="text"]');
+      const hobbies = Array.from(hobbyInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '')
+        .join(',');
+      hiddenHobbies.value = hobbies;
+
+      // Handle gender specify
+      if (genderSelect.value !== 'Other') {
+        genderSpecify.value = '';
+      }
+
+      // Show thank you message
+      thankYouMessage.style.display = 'flex';
+      setTimeout(() => {
+        thankYouMessage.style.display = 'none';
+        form.reset(); // Reset form after submission
+      }, 3000);
+
+      // Allow clicking to dismiss message
+      thankYouMessage.addEventListener('click', () => {
+        thankYouMessage.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
